@@ -1,18 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import Square from "../square";
 import "./index.css";
 
-export default class Board extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      squares: Array(9).fill(null),
-      xIsNext: true,
-      winner: null,
-    };
-  }
+function Board() {
+  const [squares, setSquares] = useState(Array(9).fill(null));
+  const [xIsNext, setXIsNext] = useState(true);
+  const [winner, setWinner] = useState(null);
 
-  calculateWinner(squares) {
+  const calculateWinner = (squares) => {
     const lines = [
       [0, 1, 2],
       [3, 4, 5],
@@ -34,55 +29,47 @@ export default class Board extends React.Component {
       }
     }
     return null;
+  };
+
+  const handleClick = (i) => {
+    const squaresCopy = squares.slice();
+    squaresCopy[i] = xIsNext ? "X" : "O";
+    setSquares(squaresCopy);
+    setXIsNext(!xIsNext);
+    setWinner(calculateWinner(squaresCopy));
+  };
+
+  const renderSquare = (i) => {
+    return <Square value={squares[i]} onClick={() => handleClick(i)} />;
+  };
+
+  let status;
+  if (winner) {
+    status = winner + " a gagné";
+  } else {
+    status = "Prochain joueur : " + (xIsNext ? "X" : "O");
   }
 
-  handleClick(i) {
-    //slice créé une copie du tableau
-    const squares = this.state.squares.slice();
-    squares[i] = this.state.xIsNext ? "X" : "O";
-    this.setState({
-      squares: squares,
-      xIsNext: !this.state.xIsNext,
-      winner: this.calculateWinner(squares),
-    });
-  }
-
-  renderSquare(i) {
-    return (
-      <Square
-        value={this.state.squares[i]}
-        onClick={() => this.handleClick(i)}
-      />
-    );
-  }
-
-  render() {
-    let status;
-    if (this.state.winner) {
-      status = this.state.winner + " a gagné";
-    } else {
-      status = "Prochain joueur : " + (this.state.xIsNext ? "X" : "O");
-    }
-
-    return (
-      <div onLoad={this.state.winner ? alert(status) : null}>
-        <div className="status">{status}</div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
+  return (
+    <div onLoad={winner ? alert(status) : null}>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        {renderSquare(0)}
+        {renderSquare(1)}
+        {renderSquare(2)}
       </div>
-    );
-  }
+      <div className="board-row">
+        {renderSquare(3)}
+        {renderSquare(4)}
+        {renderSquare(5)}
+      </div>
+      <div className="board-row">
+        {renderSquare(6)}
+        {renderSquare(7)}
+        {renderSquare(8)}
+      </div>
+    </div>
+  );
 }
+
+export default Board;
