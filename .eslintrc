@@ -1,0 +1,16 @@
+{
+  "parser": "babel-eslint",
+  "plugins": ["react", "react-hooks"],
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "env": { "browser": true, "node": true, "jest": true },
+  "rules": {
+    "no-unused-vars": 2, //0: on ne vérifie pas, 1: warning, 2: error
+    "no-trailing-spaces": 2,
+    "prefer-template": 2,
+    "quotes": [2, "single", { "avoidEscape": true }],
+    "react/no-redundant-should-component-update": 2,
+    "react/sort-comp": 2,
+    "semi": [2, "never"],
+    "react-hooks/rules-of-hooks": "error"
+  }
+}
